@@ -5,8 +5,9 @@ import java.security.*;
 
 public class UserAuth{
     UserCredentials userCredentials;
-    HashMap<String, String>credentialsMap = new HashMap<>();
+    HashMap<String, String>credentialsMap;
     Random rand = new Random();
+    static Scanner scan = new Scanner(System.in);
     public UserAuth(UserCredentials userCredentials){
         this.userCredentials = userCredentials;
         
@@ -42,14 +43,16 @@ public class UserAuth{
     }
 
     public void signUp(String username, String password){
-
+        if(credentialsMap == null){
+            credentialsMap = new HashMap<>();
+        }
         credentialsMap.put(fetchUsername(username), encrptdPassword(password));
         for (String i: credentialsMap.keySet()) {
             System.out.println(i+":"+credentialsMap.get(i));
         }
         System.out.println("User Created Successfully!");      
     }
-
+    
     public String genCaptcha(){
         String initcaptcha = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890@#$%&";
         String captcha ="";
@@ -58,18 +61,47 @@ public class UserAuth{
         }             
         return captcha;
     }
-    public void login(String uerName, String Password, String Captcha){
-        
-    }
 
+    public void login(String userName, String password){
+        String captcha = genCaptcha();
+        System.out.println("Enter the Captcha: "+ captcha);
+        String Captcha = scan.nextLine();
+        try {
+            if(!credentialsMap.isEmpty()){
+                if(!Captcha.equals(captcha)){
+                    System.out.println("Captcha MissMatch");
+                }
+                else{
+
+                    for (String i : credentialsMap.keySet()) {
+                        if(i.equals(userName) && credentialsMap.get(i).equals(encrptdPassword(password))){
+                            System.out.println("User Logged in Successful");
+                            return;
+                        }
     
+                        else{
+                            System.out.println("Credentials MissMatch");
+                        }
+                    }
+                }
+                
+            }
+        } 
+        
+        catch (Exception e) {
+            System.out.println("Unsuccessfull login Attempt");
+            System.out.println(e.getMessage());
+        }
+    }
 
     public static void main(String[] args) {
         UserCredentials userCred = new UserCredentials();
         UserAuth authObj = new UserAuth(userCred);
-        Scanner scan = new Scanner(System.in);
-        // authObj.signUp(scan.nextLine(), scan.nextLine());
-        System.out.println(authObj.genCaptcha());
-        scan.close();
+        
+        // authObj.genCaptcha();
+        authObj.login(scan.nextLine(), scan.nextLine());
+        // authObj.signUp(scan.nextLine(),scan.nextLine());
+
+        
     }
 }
