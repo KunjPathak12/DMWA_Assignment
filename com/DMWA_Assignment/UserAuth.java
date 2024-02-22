@@ -4,6 +4,7 @@ import java.math.*;
 import java.security.*;
 import java.io.*;
 
+
 public class UserAuth{
     UserCredentials userCredentials;
     HashMap<String, String>credentialsMap;
@@ -128,6 +129,7 @@ public class UserAuth{
             signUp(userName, password);
             return false;
         }
+
         String captcha = genCaptcha();
         System.out.println("Enter the Captcha: "+ captcha);
         String Captcha = scan1.nextLine();
@@ -188,17 +190,17 @@ public class UserAuth{
 
                 else{
                     System.out.println("Welcome to YourSQL");
+                    break;
                 }
 
-            // case 3:
-            //     System.out.println("Logged Out Successfully, Bye!");
-            //     break;
+            case 3:
+                break;
+                
 
-            // default:
-            //     break;
+            default:
+                break;
         }
     }
-
     public static void main(String[] args) {
         UserCredentials userCred = new UserCredentials();
         UserAuth authObj = new UserAuth(userCred);
