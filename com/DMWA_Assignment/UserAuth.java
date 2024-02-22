@@ -72,12 +72,12 @@ public class UserAuth{
             FileInputStream fileIn = new FileInputStream(readFile);
             ObjectInputStream inputStream = new ObjectInputStream(fileIn);
             credentials = (HashMap<String,String>)inputStream.readObject();
-
-            inputStream.close();
-            fileIn.close();
             // for(Map.Entry<String,String> m :credentials.entrySet()){
             //     System.out.println(m.getKey()+" : "+m.getValue());
             // }
+            inputStream.close();
+            fileIn.close();
+           
             
         } 
         
@@ -121,6 +121,13 @@ public class UserAuth{
 
     public boolean login(String userName, String password){
         credentialsMap = fetchCreds(Path, credentialsMap);
+        // for (String i: credentialsMap.keySet()) {
+        //         System.out.println(i+":"+credentialsMap.get(i));
+        //     }
+        if(!credentialsMap.containsKey(userName)){
+            signUp(userName, password);
+            return false;
+        }
         String captcha = genCaptcha();
         System.out.println("Enter the Captcha: "+ captcha);
         String Captcha = scan1.nextLine();
@@ -131,22 +138,30 @@ public class UserAuth{
                 }
                 else{
 
-                    for (String i : credentialsMap.keySet()) {
-                        if(i.equals(userName) && credentialsMap.get(i).equals(encrptdPassword(password))){
+                    // for (String i : credentialsMap.keySet()) {
+                        if(credentialsMap.containsKey(userName)){
+
+                            credentialsMap.get(userName).equals(encrptdPassword(password));
+                            
                             System.out.println("User Logged in Successful");
-                            System.out.println("Welcome to YourSQL");
-                            return true;
+                            // System.out.println("Welcome to YourSQL");2
+                            // break;
                         }
     
                         else{
+                            // System.out.println(credentialsMap.get(i));
                             System.out.println("Credentials MissMatch");
                             return false;
                         }
-                    }
+
+                    // }
+                    return true;
                 }
                 
             }
-        } 
+
+            
+        }
         
         catch (Exception e) {
             System.out.println("Unsuccessfull login Attempt");
@@ -160,22 +175,27 @@ public class UserAuth{
         switch (choice) {
             case 1:
                 signUp(scan1.nextLine(), scan1.nextLine());
+                scan1.close();
                 break;
 
             case 2:
                 
                 if(!login(scan1.nextLine(), scan1.nextLine())){
                     System.out.println("Can't Proceed further Login attempt failed");
+                    scan1.close();
+                    break;
                 }
+
                 else{
                     System.out.println("Welcome to YourSQL");
                 }
 
-            case 3:
-                System.out.println("Logged Out Successfully Bye!");
-            
-            default:
-                break;
+            // case 3:
+            //     System.out.println("Logged Out Successfully, Bye!");
+            //     break;
+
+            // default:
+            //     break;
         }
     }
 
