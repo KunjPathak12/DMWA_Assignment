@@ -50,8 +50,6 @@ public class UserAuth{
         try {
             File fileObj = new File(filePath);
             FileOutputStream fileOut= new FileOutputStream(fileObj);
-           
-
             ObjectOutputStream outputStream = new ObjectOutputStream(fileOut);
             outputStream.writeObject(credentials);
             outputStream.flush();
@@ -67,20 +65,6 @@ public class UserAuth{
         }   
 
     }
-
-    public void signUp(String username, String password){
-        if(credentialsMap == null){
-            credentialsMap = new HashMap<>();
-        }
-        credentialsMap.put(fetchUsername(username), encrptdPassword(password));
-        for (String i: credentialsMap.keySet()) {
-            System.out.println(i+":"+credentialsMap.get(i));
-        }
-        storeCreds(credentialsMap, Path);
-        System.out.println("User Created Successfully!");      
-    }
-
-    
 
     public HashMap<String,String> fetchCreds(String filePath, HashMap<String,String>credentials){
         try {
@@ -104,6 +88,27 @@ public class UserAuth{
         return credentials;
     }
 
+    public void signUp(String username, String password){
+        credentialsMap = fetchCreds(Path, credentialsMap);
+        if(credentialsMap == null){
+            credentialsMap = new HashMap<>();
+        }
+
+        else if(credentialsMap.keySet().contains(username)){
+            System.out.println("User Already exist Please proceed to login");
+            login(username, password);
+        }
+
+        else{
+            credentialsMap.put(fetchUsername(username), encrptdPassword(password));
+            // for (String i: credentialsMap.keySet()) {
+            //     System.out.println(i+":"+credentialsMap.get(i));
+            // }
+            storeCreds(credentialsMap, Path);
+            System.out.println("User Created Successfully!");      
+        }   
+    }
+
 
     public String genCaptcha(){
         String initcaptcha = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890@#$%&";
@@ -115,7 +120,6 @@ public class UserAuth{
     }
 
     public boolean login(String userName, String password){
-        
         credentialsMap = fetchCreds(Path, credentialsMap);
         String captcha = genCaptcha();
         System.out.println("Enter the Captcha: "+ captcha);
@@ -130,6 +134,7 @@ public class UserAuth{
                     for (String i : credentialsMap.keySet()) {
                         if(i.equals(userName) && credentialsMap.get(i).equals(encrptdPassword(password))){
                             System.out.println("User Logged in Successful");
+                            System.out.println("Welcome to YourSQL");
                             return true;
                         }
     
@@ -166,6 +171,9 @@ public class UserAuth{
                     System.out.println("Welcome to YourSQL");
                 }
 
+            case 3:
+                System.out.println("Logged Out Successfully Bye!");
+            
             default:
                 break;
         }
@@ -174,6 +182,7 @@ public class UserAuth{
     public static void main(String[] args) {
         UserCredentials userCred = new UserCredentials();
         UserAuth authObj = new UserAuth(userCred);
+        System.out.println("1:SignUp\n2:LogIn\n3:LogOut");
         authObj.authChoice(scan.nextInt());
         
     }
