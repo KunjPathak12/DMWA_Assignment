@@ -1,5 +1,7 @@
 package com.DMWA_Assignment;
 import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -45,15 +47,36 @@ public class FileOperations {
     public String createCsvforDb(String path){
         if(!filePresent(path)){
             File file = new File(path);
-            return("Database creation success: "+path);
+            try {
+                file.createNewFile();
+                return("Table Created: "+path);
+            } 
+            
+            catch (IOException e) {
+                e.printStackTrace();
+                return "Table Creation error";
+            }
+
+            
         }
         else{
-            return "Database Already Present can't overWrite existing DB!";
+            return "Table Already Present can't create existing Table!";
         }
     }
 
-    // public static void main(String[] args) {
-    //     FileOperations fops = new FileOperations();
-    //     fops.checkFolder("com/DMWA_Assignment/resources/Kunj.txt");
-    // }
+    public String writeIntoCsv (String path, String data){
+        try {
+            Path out = Paths.get(path);
+            BufferedWriter writer = new BufferedWriter(new FileWriter(out.toFile()));
+            writer.write(data);
+            writer.close();
+            return "Table Written";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Couldn't write the table";
+        }
+        
+        
+    }
+
 }

@@ -6,15 +6,16 @@ import java.util.*;
 import java.util.regex.*;
 
 public class Query {
-    private ArrayList<String> queryTypes = new ArrayList<>(Arrays.asList("create", "insert", "select", "exit"));
+    // private ArrayList<String> queryTypes = new ArrayList<>(Arrays.asList("create", "insert", "select", "exit"));
     static Scanner scan = new Scanner(System.in);
     FileOperations fops = new FileOperations();
-    boolean checkDb = false;
-
+    boolean checkExit = false;
+    String selectedDB= "testdb";
+    // ArrayList<String> tableData;
     public class Create{
         String createQuery;
         public String dbName;
-        public String table;
+        public String tableDB;
         public Create(String createQuery){
             this.createQuery = createQuery;
         }
@@ -36,31 +37,79 @@ public class Query {
     }
 
     public class CreateTable extends Create{
+        String tablePath;
         String tableName;
+        String tableStatus;
         public CreateTable(String createQuery) {
             super(createQuery);
-            // System.out.println(createQuery);
-            tableName = createQuery;
-            // tableName = table;
+            if(selectedDB.equals("No DB Selected")){
+                System.out.println("select db first");
+            }
+            // table = 
+            tableDB = selectedDB;
+            tableName = createQuery.toLowerCase().trim().split("table")[1].split("\\(")[0].trim();
+            tablePath = "com" + File.separator + "DMWA_Assignment" + File.separator + "resources" + File.separator + tableDB + File.separator + tableName + ".csv";
+            tableStatus = fops.createCsvforDb(tablePath);
         }
-
+        String columns = createQuery.split("^([^(]+[(])")[1];
+        StringBuilder columnInfo = new StringBuilder();
+        String [] strArr = columns.split(",");
         public String print(){
-            return tableName.toUpperCase();
+            for(int i=0;i<strArr.length;i++){
+                switch (strArr[i].trim().split(" ")[1].split("\\(")[0]) 
+                {
+                    case "int":
+                        columnInfo.append("INT_");
+                        break;
+                    case "float":
+                        columnInfo.append("FLOAT_");
+                        break;
+                    case "text":
+                        columnInfo.append("TEXT_");
+                        break;
+                    case "double":
+                        columnInfo.append("DOUBLE_");
+                        break;
+                    case "long":
+                        columnInfo.append("LONG_");
+                        break;
+                    case "varchar":
+                        columnInfo.append("TEXT_");
+                        break;
+                    default:
+                        break;
+                }
+
+                if(i == strArr.length-1){
+                    columnInfo.append(strArr[i].trim().split(" ")[0]);
+                }
+                else{
+                    columnInfo.append(strArr[i].trim().split(" ")[0]).append(",");
+                }
+            }
+
+            columnInfo.append("\r\n");
+            
+            // tableData = new ArrayList<>(Arrays.asList(columnInfo.toString().split(",")));
+            String tableData = columnInfo.toString();
+            // System.out.println(str);
+            fops.writeIntoCsv(tablePath, tableData);
+            return tableStatus;
         }
 
     }
 
-    public boolean useDatabase(String useQuery){
+    public String useDatabase(String useQuery){
         String dbname = useQuery.toLowerCase().split("use")[1].split(";")[0].trim();
         String path = "com" + File.separator + "DMWA_Assignment" + File.separator + "resources" + File.separator + dbname;
-        System.out.println(path);
+        // System.out.println(path);
         if(fops.filePresent(path)){
             System.out.println("Selected Database is: "+dbname);
-            return true;
+            return dbname;
         }
         else{
-            System.out.println("Database Not Present on System");
-            return false;
+            String rval = "Database Not Present on System";
+            return rval;
         }
         
 
@@ -102,16 +151,11 @@ public class Query {
                 
             }
 
-            else if(initQuery.contains("table")){
-                // System.out.println(initQuery);
-                if(checkDb){
-                    // CreateTable newTable = new CreateTable(initQuery);
-                    CreateDB data = new CreateDB(initQuery);
-                    resp = data.print();
-                }
-                else{
-                    resp = "Select database first";
-                }
+            else if(initQuery.toLowerCase().contains("table")){
+                System.out.println(initQuery);
+                CreateTable newTable = new CreateTable(initQuery);
+                    // CreateDB data = new CreateDB(initQuery);
+                resp = newTable.print();
  
             }
 
@@ -119,10 +163,9 @@ public class Query {
         }
 
         else if(str.equals("use")){
-            checkDb = useDatabase(initQuery);
-            if(checkDb){
-                resp = parseQuery();
-            }
+            selectedDB = useDatabase(initQuery);
+            // resp = parseQuery();
+            
         }
 
         else if(initQuery.trim().contains("exit;")){
@@ -143,11 +186,6 @@ public class Query {
         Matcher matcher = ptn.matcher("[int]");
         
         Query query = new Query();
-        // CreateTable tb1 = query.new CreateTable("");
-        // System.out.println(tb1.print());
         System.out.println(query.parseQuery());
-        // System.out.println();
-
-        // System.out.println(str1.split("table")[1].split(";")[0]);
     }
 }
