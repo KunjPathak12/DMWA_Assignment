@@ -1,4 +1,5 @@
 package com.DMWA_Assignment;
+import java.util.*;
 
 public class Test {
     // Online Java Compiler
@@ -40,5 +41,8 @@ public class Test {
 
         contentToWrite.append("\r\n");
         System.out.println(contentToWrite.toString());
+        // ArrayList<Integer> newARR = new ArrayList<>();
+        // HashMap<String,ArrayList<Integer>> newMap = new HashMap<>();
+        // newMap.put("sdcfv", newARR);
     }
 }

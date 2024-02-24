@@ -7,6 +7,7 @@ import java.util.regex.*;
 
 public class Query {
     // private ArrayList<String> queryTypes = new ArrayList<>(Arrays.asList("create", "insert", "select", "exit"));
+    
     static Scanner scan = new Scanner(System.in);
     FileOperations fops = new FileOperations();
     boolean checkExit = false;
@@ -29,6 +30,7 @@ public class Query {
             dbName = createQuery.toLowerCase().trim().split("database")[1].split(";")[0].trim();
             folderPath = "com" + File.separator + "DMWA_Assignment" + File.separator + "resources" + File.separator + dbName;
             DbStatus = fops.createDbFolder(folderPath);
+            
         }
 
         public String print(){
@@ -115,6 +117,28 @@ public class Query {
 
     }
 
+    public String insertTableData(String insertQuery){
+        String tableName = insertQuery.toLowerCase().split("into")[1].split("values")[0].trim();
+        String path = "com" + File.separator + "DMWA_Assignment" + File.separator + "resources" + File.separator + selectedDB + File.separator + tableName + ".csv";
+        // System.out.println(path);
+        String tableData = insertQuery.split("^([^(]+[(])")[1].split("\\)")[0].trim();
+        
+        int clLength = fops.readColumnLength(path).split(",").length;
+        if(fops.filePresent(path)){
+            if (tableData.split(",").length == clLength){
+                fops.writeIntoCsv(path, tableData);
+                return "Success";
+            }
+            else {
+                return("Insert data according to columns\n"+"total columns: "+clLength);
+            }
+        }
+        else{
+            return "Table Not Found";
+        }
+
+    }
+// sda nu reason su aapiyu ???
     public void exit(){
 
         try {
@@ -168,6 +192,11 @@ public class Query {
             
         }
 
+        else if(str.equals("insert")){
+            System.out.println(insertTableData(initQuery));
+            resp = "insert query detect";
+        }
+
         else if(initQuery.trim().contains("exit;")){
             exit();
         }
@@ -182,8 +211,8 @@ public class Query {
 
     public static void main(String[] args) {
         
-        Pattern ptn = Pattern.compile("");
-        Matcher matcher = ptn.matcher("[int]");
+        // Pattern ptn = Pattern.compile("");
+        // Matcher matcher = ptn.matcher("[int]");
         
         Query query = new Query();
         System.out.println(query.parseQuery());

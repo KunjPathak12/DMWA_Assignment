@@ -67,8 +67,8 @@ public class FileOperations {
     public String writeIntoCsv (String path, String data){
         try {
             Path out = Paths.get(path);
-            BufferedWriter writer = new BufferedWriter(new FileWriter(out.toFile()));
-            writer.write(data);
+            BufferedWriter writer = new BufferedWriter(new FileWriter(out.toFile(),true));
+            writer.write(data+System.lineSeparator());
             writer.close();
             return "Table Written";
         } catch (Exception e) {
@@ -78,5 +78,25 @@ public class FileOperations {
         
         
     }
+
+    public String readColumnLength(String path){
+        String column;
+        try {
+            BufferedReader brTest = new BufferedReader(new FileReader(path));
+            column = brTest.readLine();
+            return column;
+        } 
+        
+        catch (IOException e) {
+            e.printStackTrace();
+            return "Empty File";
+        }
+        
+    }
+
+    // public String writetoTableCsv(String path, String data){
+    //     CSWriter 
+    //     return "";
+    // }
 
 }
