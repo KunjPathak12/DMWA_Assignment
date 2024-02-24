@@ -122,9 +122,9 @@ public class UserAuth{
 
     public boolean login(String userName, String password){
         credentialsMap = fetchCreds(Path, credentialsMap);
-        // for (String i: credentialsMap.keySet()) {
-        //         System.out.println(i+":"+credentialsMap.get(i));
-        //     }
+        for (String i: credentialsMap.keySet()) {
+                System.out.println(i+":"+credentialsMap.get(i));
+            }
         if(!credentialsMap.containsKey(userName)){
             signUp(userName, password);
             return false;
