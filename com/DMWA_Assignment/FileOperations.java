@@ -11,10 +11,11 @@ public class FileOperations {
         
         File fileName = new File(path);
         if(fileName.exists()){
-            System.out.println("Already Present");
+            // System.out.println("File Present check ok");
             return true;
         }
         else {
+
             return false;
         }
         
@@ -39,7 +40,7 @@ public class FileOperations {
         }
 
         else{
-            return "Database already present";
+            return "Database already present can't overwrite the existing one";
         }
         
     }
@@ -60,6 +61,7 @@ public class FileOperations {
             
         }
         else{
+           
             return "Table Already Present can't create existing Table!";
         }
     }
@@ -92,6 +94,26 @@ public class FileOperations {
             return "Empty File";
         }
         
+    }
+
+    public String readFileForSelect(String Path){
+        String content = null;
+        if(filePresent(Path)){
+            File file = new File(Path);
+            try(FileReader fr = new FileReader(file); BufferedReader br = new BufferedReader(fr)) {
+                while( (content = br.readLine()) != null) {
+                    System.out.println(content); 
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                return "Error reading the table";
+            }
+            return System.lineSeparator()+"Table Fetching Complete";
+        }
+
+        else{
+            return "Error reading the table";
+        }
     }
 
     // public String writetoTableCsv(String path, String data){

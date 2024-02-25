@@ -95,7 +95,10 @@ public class Query {
             // tableData = new ArrayList<>(Arrays.asList(columnInfo.toString().split(",")));
             String tableData = columnInfo.toString();
             // System.out.println(str);
-            fops.writeIntoCsv(tablePath, tableData);
+            if(!tableStatus.equals("Table Already Present can't create existing Table!")){
+                fops.writeIntoCsv(tablePath, tableData);
+            }
+            
             return tableStatus;
         }
 
@@ -138,7 +141,21 @@ public class Query {
         }
 
     }
-// sda nu reason su aapiyu ???
+
+    public String selectAllQuery(String selectQuery){
+        String tableName = selectQuery.split("\\*")[1].split("from")[1].split(";")[0].trim();
+        String path = "com" + File.separator + "DMWA_Assignment" + File.separator + "resources" + File.separator + selectedDB + File.separator + tableName + ".csv";
+        String content = null;
+        if(fops.filePresent(path)){
+            System.out.println(System.lineSeparator()+tableName+"'s"+" "+"Data");
+            System.out.println("==============================================================");
+            content = fops.readFileForSelect(path);
+        }
+        return content;
+
+
+    }
+
     public void exit(){
 
         try {
@@ -177,9 +194,18 @@ public class Query {
 
             else if(initQuery.toLowerCase().contains("table")){
                 System.out.println(initQuery);
-                CreateTable newTable = new CreateTable(initQuery);
+                try {
+                    CreateTable newTable = new CreateTable(initQuery);
+                    resp = newTable.print();
+                } 
+                
+                catch (Exception e) {
+                   e.getStackTrace();
+                   resp = "Please check your create table syntax";
+                }
+                
                     // CreateDB data = new CreateDB(initQuery);
-                resp = newTable.print();
+                
  
             }
 
@@ -199,6 +225,10 @@ public class Query {
 
         else if(initQuery.trim().contains("exit;")){
             exit();
+        }
+
+        else if(str.equals("select")){
+            resp = selectAllQuery(initQuery);
         }
 
         else{
