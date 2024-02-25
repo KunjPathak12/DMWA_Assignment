@@ -76,8 +76,7 @@ public class FileOperations {
         } catch (Exception e) {
             e.printStackTrace();
             return "Couldn't write the table";
-        }
-        
+        }      
         
     }
 

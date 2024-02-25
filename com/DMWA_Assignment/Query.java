@@ -12,6 +12,7 @@ public class Query {
     FileOperations fops = new FileOperations();
     boolean checkExit = false;
     String selectedDB= "testdb";
+    String defaultPath = "com" + File.separator + "DMWA_Assignment" + File.separator + "resources" + File.separator;
     // ArrayList<String> tableData;
     public class Create{
         String createQuery;
@@ -50,7 +51,7 @@ public class Query {
             // table = 
             tableDB = selectedDB;
             tableName = createQuery.toLowerCase().trim().split("table")[1].split("\\(")[0].trim();
-            tablePath = "com" + File.separator + "DMWA_Assignment" + File.separator + "resources" + File.separator + tableDB + File.separator + tableName + ".csv";
+            tablePath = defaultPath + tableDB + File.separator + tableName + ".csv";
             tableStatus = fops.createCsvforDb(tablePath);
         }
         String columns = createQuery.split("^([^(]+[(])")[1];
@@ -104,6 +105,8 @@ public class Query {
 
     }
 
+
+
     public String useDatabase(String useQuery){
         String dbname = useQuery.toLowerCase().split("use")[1].split(";")[0].trim();
         String path = "com" + File.separator + "DMWA_Assignment" + File.separator + "resources" + File.separator + dbname;
@@ -148,7 +151,7 @@ public class Query {
         String content = null;
         if(fops.filePresent(path)){
             System.out.println(System.lineSeparator()+tableName+"'s"+" "+"Data");
-            System.out.println("==============================================================");
+            System.out.println("===========================================================");
             content = fops.readFileForSelect(path);
         }
         return content;
@@ -175,12 +178,17 @@ public class Query {
     
     }
 
-    public String parseQuery(){
+    public String queryInterpreter(){
         String initQuery = scan.nextLine();
         while(!initQuery.contains(";")){
             initQuery+=scan.nextLine();
         }
-        
+        return initQuery;
+    }
+
+    public String functionality(String initQuery){
+
+        // System.out.println(initQuery);
         String strArr[] = initQuery.toLowerCase().split(" ");
         String str = strArr[0];
         String resp="";
@@ -232,10 +240,55 @@ public class Query {
         }
 
         else{
-            resp = "Create not found in query";
+            resp = "check syntax";
         }
         
         return resp;
+
+    }
+
+    public String parseQuery(){
+        String initQuery = queryInterpreter();
+        // while(!initQuery.contains(";")){
+        //     initQuery+=scan.nextLine();
+        // }
+        // System.out.println(initQuery);
+        if(initQuery.toLowerCase().equals("begin transaction;")){
+            return transactions();
+        }
+
+        else{
+            return functionality(initQuery);
+        }
+        
+    }
+
+    public String transactions(){
+        String command= "";
+        boolean checkCommit = false;
+        ArrayList<String> queryList = new ArrayList(); 
+        while(true){
+            command = queryInterpreter();
+            queryList.add(command);
+            if(command.toLowerCase().trim().equals("rollback;")){
+               queryList.clear();
+               break;
+            }
+            else if(command.toLowerCase().trim().equals("commit;")){
+                queryList.remove(queryList.size()-1);
+                checkCommit = true;
+                break;
+            }
+        }
+
+        if(checkCommit){
+            for(String i: queryList){
+                functionality(i);
+            }
+        }
+        queryList.clear();
+
+        return "Transaction ends";
     }
 
 
