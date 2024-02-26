@@ -13,6 +13,8 @@ public class UserAuth{
     static Scanner scan = new Scanner(System.in);
     Scanner scan1 = new Scanner(System.in);
     Query exitQuery = new Query();
+
+    // @param
     public UserAuth(UserCredentials userCredentials){
         this.userCredentials = userCredentials;
         
@@ -177,10 +179,14 @@ public class UserAuth{
     public boolean authChoice(String choice){
         switch (choice) {
             case "1":
+            try {
                 signUp(scan1.nextLine(), scan1.nextLine());
-                scan1.close();
+                // scan1.close();
                 return false;
-
+            } catch (Exception e) {
+                // TODO: handle exception
+            }
+            
             case "2":
                 
                 if(!login(scan1.nextLine(), scan1.nextLine())){
