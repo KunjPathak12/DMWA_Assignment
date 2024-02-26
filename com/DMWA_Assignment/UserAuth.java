@@ -12,6 +12,7 @@ public class UserAuth{
     String Path = "com/DMWA_Assignment/credentials/userInfo";
     static Scanner scan = new Scanner(System.in);
     Scanner scan1 = new Scanner(System.in);
+    Query exitQuery = new Query();
     public UserAuth(UserCredentials userCredentials){
         this.userCredentials = userCredentials;
         
@@ -106,7 +107,7 @@ public class UserAuth{
             //     System.out.println(i+":"+credentialsMap.get(i));
             // }
             storeCreds(credentialsMap, Path);
-            System.out.println("User Created Successfully!");      
+            System.out.println("User Created Successfully!\nPlease Proceed to Login now");      
         }   
     }
 
@@ -122,9 +123,9 @@ public class UserAuth{
 
     public boolean login(String userName, String password){
         credentialsMap = fetchCreds(Path, credentialsMap);
-        for (String i: credentialsMap.keySet()) {
-                System.out.println(i+":"+credentialsMap.get(i));
-            }
+        // for (String i: credentialsMap.keySet()) {
+        //         System.out.println(i+":"+credentialsMap.get(i));
+        //     }
         if(!credentialsMap.containsKey(userName)){
             signUp(userName, password);
             return false;
@@ -173,39 +174,44 @@ public class UserAuth{
         return false;
     }
 
-    public void authChoice(int choice){
+    public boolean authChoice(String choice){
         switch (choice) {
-            case 1:
+            case "1":
                 signUp(scan1.nextLine(), scan1.nextLine());
                 scan1.close();
-                break;
+                return false;
 
-            case 2:
+            case "2":
                 
                 if(!login(scan1.nextLine(), scan1.nextLine())){
                     System.out.println("Can't Proceed further Login attempt failed");
                     scan1.close();
-                    break;
+                    // break;
+                    return false;
                 }
 
                 else{
                     System.out.println("Welcome to YourSQL");
-                    break;
+                    return true;
+                    // break;
                 }
-
-            case 3:
-                break;
+                
+            case "3":
+                // System.out.println("Print Exit to Exit");
+                exitQuery.exit();
+                return true;
+                // break;
                 
 
             default:
-                break;
+                return false;
         }
     }
-    public static void main(String[] args) {
-        UserCredentials userCred = new UserCredentials();
-        UserAuth authObj = new UserAuth(userCred);
-        System.out.println("1:SignUp\n2:LogIn\n3:LogOut");
-        authObj.authChoice(scan.nextInt());
+    // public static void main(String[] args) {
+    //     UserCredentials userCred = new UserCredentials();
+    //     UserAuth authObj = new UserAuth(userCred);
+    //     System.out.println("1:SignUp\n2:LogIn\n3:LogOut");
+    //     authObj.authChoice(scan.nextLine());
         
-    }
+    // }
 }

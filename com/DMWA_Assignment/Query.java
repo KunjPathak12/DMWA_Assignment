@@ -222,13 +222,13 @@ public class Query {
 
         else if(str.equals("use")){
             selectedDB = useDatabase(initQuery);
-            // resp = parseQuery();
+            resp = parseQuery();
             
         }
 
         else if(str.equals("insert")){
-            System.out.println(insertTableData(initQuery));
-            resp = "insert query detect";
+            // System.out.println(insertTableData(initQuery));
+            resp = insertTableData(initQuery);
         }
 
         else if(initQuery.trim().contains("exit;")){
@@ -242,7 +242,7 @@ public class Query {
         else{
             resp = "check syntax";
         }
-        
+        System.out.println(resp);
         return resp;
 
     }
@@ -292,12 +292,12 @@ public class Query {
     }
 
 
-    public static void main(String[] args) {
+    // public static void main(String[] args) {
         
-        // Pattern ptn = Pattern.compile("");
-        // Matcher matcher = ptn.matcher("[int]");
+    //     // Pattern ptn = Pattern.compile("");
+    //     // Matcher matcher = ptn.matcher("[int]");
         
-        Query query = new Query();
-        System.out.println(query.parseQuery());
-    }
+    //     Query query = new Query();
+    //     System.out.println(query.parseQuery());
+    // }
 }
