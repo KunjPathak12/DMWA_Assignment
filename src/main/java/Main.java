@@ -25,16 +25,19 @@ public class Main {
                     String Title = "";
                     String Body = "";
                     if(i.contains("Title: ")){
-                        Title = i.replace("Title: ","");
+                        Title = i.replace("Title: ", "").split(System.lineSeparator())[0];
                     }
                     if(i.contains("Body: ")){
-                        Body = i.replace("Body: ", "");
+                        Body = i.replace("Title: "+Title+System.lineSeparator(), "").replace("Body: ", "");
                     }
-                    InsertOneResult result = collection.insertOne(new Document()
-                            .append("Title", Title)
-                            .append("Body", Body));
-                    // Prints the ID of the inserted document
-                    System.out.println("Success! Inserted document id: " + result.getInsertedId());
+                    if(!Title.isEmpty() || !Body.isEmpty()){
+                        InsertOneResult result = collection.insertOne(new Document()
+                                .append("Title", Title)
+                                .append("Body", Body));
+                        System.out.println("Success! Inserted document id: " + result.getInsertedId());
+                    }
+
+
                 }
 
             }
