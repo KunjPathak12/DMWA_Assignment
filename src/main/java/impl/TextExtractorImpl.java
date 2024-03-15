@@ -55,7 +55,8 @@ public class TextExtractorImpl implements TextExtractor {
         Matcher matcher = pattern.matcher(File);
 
         while(matcher.find()){
-            Data.add("Title: "+splitFileByTitle(matcher.group(1))+System.lineSeparator()+"Body: "+splitFileByBody(matcher.group(1))+System.lineSeparator());
+            Data.add("Title: "+splitFileByTitle(matcher.group(1)));
+            Data.add("Body: "+splitFileByBody(matcher.group(1))+System.lineSeparator());
         }
         System.out.println(Data.size());
         return Data;
