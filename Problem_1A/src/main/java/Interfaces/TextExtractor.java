@@ -1,4 +1,4 @@
-package Problem_1A.Interfaces;
+package Interfaces;
 
 import java.util.ArrayList;
 import java.util.regex.Pattern;

@@ -1,6 +1,6 @@
-package Problem_1A.Impl;
+package Impl;
 
-import Problem_1A.Interfaces.TextExtractor;
+import Interfaces.TextExtractor;
 
 import java.util.ArrayList;
 import java.util.regex.Matcher;

@@ -1,6 +1,6 @@
-package Problem_1A.Impl;
+package Impl;
 
-import Problem_1A.Interfaces.ReutReader;
+import Interfaces.ReutReader;
 
 import java.io.*;
 

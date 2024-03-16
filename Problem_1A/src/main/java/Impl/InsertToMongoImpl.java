@@ -1,7 +1,7 @@
-package Problem_1A.Impl;
+package Impl;
 
-import Problem_1A.Interfaces.InsertToMongo;
-import Problem_1A.Interfaces.TextExtractor;
+import Interfaces.InsertToMongo;
+import Interfaces.TextExtractor;
 import com.mongodb.MongoException;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
