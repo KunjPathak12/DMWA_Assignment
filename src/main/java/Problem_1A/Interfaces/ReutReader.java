@@ -1,4 +1,4 @@
-package Interfaces;
+package Problem_1A.Interfaces;
 
 public interface ReutReader {
 
