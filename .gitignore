@@ -33,8 +33,11 @@ build/
 
 ### VS Code ###
 .vscode/
-.idea/
-./idea
+.idea/*
+.idea/*.iml
+.idea/*.xml
+.idea/.ipr
+.idea
 
 ### Mac OS ###
 .DS_Store
