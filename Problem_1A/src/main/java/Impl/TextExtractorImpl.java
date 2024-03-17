@@ -58,7 +58,7 @@ public class TextExtractorImpl implements TextExtractor {
             Data.add("Title: "+splitFileByTitle(matcher.group(1))+System.lineSeparator()+"Body: "+splitFileByBody(matcher.group(1))+System.lineSeparator());
 //            Data.add();
         }
-        System.out.println(Data.size());
+//        System.out.println(Data.size());
         return Data;
     }
 

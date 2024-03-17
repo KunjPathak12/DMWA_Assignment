@@ -6,6 +6,8 @@ import Interfaces.SentimentUtils;
 import Interfaces.TextExtractor;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class SentiMentUtilsImpl implements SentimentUtils {
 
@@ -21,8 +23,8 @@ public class SentiMentUtilsImpl implements SentimentUtils {
                 if(!i.isEmpty() || !i.isBlank()) titleList.add(i);
             }
         }
-        System.out.println(titleList.toString());
-        System.out.println(titleList.size());
+//        System.out.println(titleList.toString());
+//        System.out.println(titleList.size());
         return titleList;
     }
 
@@ -34,10 +36,24 @@ public class SentiMentUtilsImpl implements SentimentUtils {
 
     public static void main(String[] args) {
         SentimentUtils obj = new SentiMentUtilsImpl();
-        obj.getTitles("reut2-009.sgm");
+//        ;
         FileOperations fops = new FileOperationsImpl();
         ArrayList<String> negativeWords = fops.getWordArray("negative-words.txt");
         ArrayList<String> positiveWords = fops.getWordArray("positive-words.txt");
-        System.out.println(negativeWords.toString()+System.lineSeparator()+positiveWords.toString());
+//        System.out.println(negativeWords.size()+System.lineSeparator()+positiveWords.size());
+        for (String i: obj.getTitles("reut2-009.sgm")){
+            int counter = 0;
+            List<String> eachTitle = Arrays.asList(i.toLowerCase().replace(",","").split(" "));
+            for(String j: positiveWords){
+                if (eachTitle.contains(j.toLowerCase())) {
+
+                    counter++;
+                }
+            }
+            System.out.println(counter);
+            break;
+        }
+
+
     }
 }
