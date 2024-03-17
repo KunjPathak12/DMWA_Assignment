@@ -26,6 +26,7 @@ public class Main {
         List<Map.Entry<String, Integer>> result = wordCounts.collect();
 
         for (Map.Entry<String, Integer> entry : result) {
+//            if(entry.getKey().startsWith("1-9")) entry.setValue(null);
             System.out.println(entry.getKey() + ": " + entry.getValue());
         }
     }
