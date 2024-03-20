@@ -24,10 +24,25 @@ public class Main {
                 .map(pair -> new AbstractMap.SimpleEntry<>(pair._1(), pair._2()));
 
         List<Map.Entry<String, Integer>> result = wordCounts.collect();
-
+        HashMap<String, Integer> myHashMap = new HashMap<>();
         for (Map.Entry<String, Integer> entry : result) {
 //            if(entry.getKey().startsWith("1-9")) entry.setValue(null);
-            System.out.println(entry.getKey() + ": " + entry.getValue());
+            myHashMap.put(entry.getKey(), entry.getValue());
+//            System.out.println(entry.getKey() + ": " + entry.getValue());
         }
+//        System.out.println(myHashMap.toString());
+        ArrayList<String>mostFrequentWords = new ArrayList<>();
+        int max = 1;
+        for(String i: myHashMap.keySet()){
+            if(myHashMap.get(i)<=1) continue;
+//            else{
+            max = myHashMap.get(i);
+//            }
+        }
+        for(String i: myHashMap.keySet()){
+            if(myHashMap.get(i) == max) mostFrequentWords.add(i);
+        }
+        System.out.println("mostFrequentWords: "+ mostFrequentWords.toString()+ System.lineSeparator()+"Max VAl = "+max);
     }
+
 }

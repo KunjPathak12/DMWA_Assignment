@@ -23,8 +23,7 @@ public class SentiMentUtilsImpl implements SentimentUtils {
                 if(!i.isEmpty() || !i.isBlank()) titleList.add(i);
             }
         }
-//        System.out.println(titleList.toString());
-//        System.out.println(titleList.size());
+
         return titleList;
     }
 
