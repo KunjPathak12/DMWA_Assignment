@@ -7,6 +7,7 @@ import Interfaces.TextExtractor;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class SentiMentUtilsImpl implements SentimentUtils {
@@ -35,23 +36,20 @@ public class SentiMentUtilsImpl implements SentimentUtils {
 
     public static void main(String[] args) {
         SentimentUtils obj = new SentiMentUtilsImpl();
-//        ;
         FileOperations fops = new FileOperationsImpl();
         ArrayList<String> negativeWords = fops.getWordArray("negative-words.txt");
         ArrayList<String> positiveWords = fops.getWordArray("positive-words.txt");
-//        System.out.println(negativeWords.size()+System.lineSeparator()+positiveWords.size());
+        HashMap<String, Integer> titleSentiment = new HashMap<String, Integer>();
         for (String i: obj.getTitles("reut2-009.sgm")){
             int counter = 0;
             List<String> eachTitle = Arrays.asList(i.toLowerCase().replace(",","").split(" "));
-            for(String j: positiveWords){
-                if (eachTitle.contains(j.toLowerCase())) {
-
-                    counter++;
-                }
+            for(String j: eachTitle){
+                if (positiveWords.contains(j)) counter++;
+                else if(negativeWords.contains(j)) counter--;
             }
-            System.out.println(counter);
-            break;
+            titleSentiment.put(i, counter);
         }
+//        System.out.println(titleSentiment.values());
 
 
     }
