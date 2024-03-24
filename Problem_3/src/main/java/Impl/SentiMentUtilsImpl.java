@@ -40,14 +40,29 @@ public class SentiMentUtilsImpl implements SentimentUtils {
         ArrayList<String> negativeWords = fops.getWordArray("negative-words.txt");
         ArrayList<String> positiveWords = fops.getWordArray("positive-words.txt");
         HashMap<String, Integer> titleSentiment = new HashMap<String, Integer>();
+        String csvPath = "Problem_3/SentimentAnalysis.csv";
+        int index = 1;
+        fops.writeToCsv(csvPath,"News#"+"\t"+"Title Content"+"\t"+"match"+"\t"+"Score"+"\t"+"Polarity");
         for (String i: obj.getTitles("reut2-009.sgm")){
             int counter = 0;
+
+            ArrayList<String> matchedWords = new ArrayList<>();
             List<String> eachTitle = Arrays.asList(i.toLowerCase().replace(",","").split(" "));
             for(String j: eachTitle){
-                if (positiveWords.contains(j)) counter++;
-                else if(negativeWords.contains(j)) counter--;
+                if (positiveWords.contains(j)){
+                    matchedWords.add(j);
+                    counter++;
+                }
+                else if(negativeWords.contains(j)) {
+                    matchedWords.add(j);
+                    counter--;
+                }
             }
             titleSentiment.put(i, counter);
+            String data = index+"\t"+i+"\t"+titleSentiment.get(i)+"\t"+matchedWords.toString();
+            index++;
+            fops.writeToCsv(csvPath,data);
+
         }
 //        System.out.println(titleSentiment.values());
 
