@@ -1,10 +1,8 @@
 package Impl;
 
-import Interfaces.FileOperations;
-import Interfaces.ReutReader;
-import Interfaces.SentimentUtils;
-import Interfaces.TextExtractor;
+import Interfaces.*;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -40,9 +38,10 @@ public class SentiMentUtilsImpl implements SentimentUtils {
         ArrayList<String> negativeWords = fops.getWordArray("negative-words.txt");
         ArrayList<String> positiveWords = fops.getWordArray("positive-words.txt");
         HashMap<String, Integer> titleSentiment = new HashMap<String, Integer>();
-        String csvPath = "Problem_3/SentimentAnalysis.csv";
+        String csvPath = "Problem_3"+ File.separator+"SentimentAnalysis.csv";
         int index = 1;
-        fops.writeToCsv(csvPath,"News#"+"\t"+"Title Content"+"\t"+"match"+"\t"+"Score"+"\t"+"Polarity");
+        SentimentTypes stype = SentimentTypes.Neutral;
+        fops.writeToCsv(csvPath,"News#,"+"\t"+"Title Content,"+"\t"+"match,"+"\t"+"Score,"+"\t"+"Polarity");
         for (String i: obj.getTitles("reut2-009.sgm")){
             int counter = 0;
 
@@ -58,14 +57,14 @@ public class SentiMentUtilsImpl implements SentimentUtils {
                     counter--;
                 }
             }
+
             titleSentiment.put(i, counter);
-            String data = index+"\t"+i+"\t"+titleSentiment.get(i)+"\t"+matchedWords.toString();
+            stype = (counter > 0) ? SentimentTypes.Positive : SentimentTypes.Negative;
+            if(counter == 0)stype = SentimentTypes.Neutral;
+            String data = index + ",\t"+ i.replace(",", " ") + ",\t" + titleSentiment.get(i) + ",\t" + matchedWords.toString().replace(",", " ") + ",\t" + stype;
             index++;
             fops.writeToCsv(csvPath,data);
 
         }
-//        System.out.println(titleSentiment.values());
-
-
     }
 }
