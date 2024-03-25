@@ -1,4 +1,4 @@
-News#,	Title Content,	match,	Score,	Polarity
+News#,	Title Content,	Score,	Match,	Polarity
 1,	ADVANCED MAGNETICS ADMG IN AGREEMENT,	2,	[advanced  agreement],	Positive
 2,	HEALTH RESEARCH FILES FOR BANKRUPTCY,	-1,	[bankruptcy],	Negative
 3,	NUMEREX CORP NMRX 2ND QTR JAN 31 LOSS,	-1,	[loss],	Negative
