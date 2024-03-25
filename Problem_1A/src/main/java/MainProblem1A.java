@@ -3,7 +3,7 @@ import Impl.ReutReaderImpl;
 import Interfaces.InsertToMongo;
 import Interfaces.ReutReader;
 
-public class Main {
+public class MainProblem1A {
     public static void main(String[] args) {
         ReutReader reader = new ReutReaderImpl();
         InsertToMongo insert = new InsertToMongoImpl();

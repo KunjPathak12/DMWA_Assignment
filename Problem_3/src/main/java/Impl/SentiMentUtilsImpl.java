@@ -1,6 +1,8 @@
 package Impl;
 
 import Interfaces.*;
+import com.mongodb.client.*;
+import org.bson.Document;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -10,8 +12,6 @@ import java.util.List;
 
 public class SentiMentUtilsImpl implements SentimentUtils {
 
-    ReutReader reutReader = new ReutReaderImpl();
-    TextExtractor textExtractor = new TextExtractorImpl();
     private ArrayList<String> titleExtractor(ArrayList<String> cleandText){
 
         ArrayList<String> titleList = new ArrayList<>();
@@ -26,8 +26,16 @@ public class SentiMentUtilsImpl implements SentimentUtils {
         return titleList;
     }
 
-    private ArrayList<String>getTitles(String fileName){
-       return titleExtractor(textExtractor.mappedData(reutReader.readFile(fileName)));
+    private ArrayList<String>getTitles(String uri){
+        MongoClient mongoClient = MongoClients.create(uri);
+        MongoDatabase database = mongoClient.getDatabase("ReuterDb");
+        MongoCollection<Document> collection = database.getCollection("Reuter's Data");
+        FindIterable<Document> docList = collection.find();
+        ArrayList<String> titleList = new ArrayList<>();
+        for(Document document: docList){
+            titleList.add(document.get("Title").toString());
+        }
+       return titleList;
     }
 
     @Override
@@ -41,7 +49,7 @@ public class SentiMentUtilsImpl implements SentimentUtils {
             int index = 1;
             SentimentTypes stype = SentimentTypes.Neutral;
             fops.writeToCsv(csvPath,"News#,"+"\t"+"Title Content,"+"\t"+"Score,"+"\t"+"Match,"+"\t"+"Polarity");
-            for (String i: getTitles("reut2-009.sgm")){
+            for (String i: getTitles("mongodb+srv://kunj:kunj12345@assignment.4ogqk51.mongodb.net/")){
                 int counter = 0;
 
                 ArrayList<String> matchedWords = new ArrayList<>();
